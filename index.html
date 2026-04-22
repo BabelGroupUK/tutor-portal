@@ -3,86 +3,85 @@
 <head>
   <title>Babel Tutor Portal</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-
-    h1, h2 {
-      color: #333;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    th, td {
-      border: 1px solid #ccc;
-      padding: 10px;
-      text-align: center;
-      vertical-align: top;
-      height: 60px;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-
-    .cell {
-      width: 100%;
-      height: 100%;
-      border: none;
-      outline: none;
-      text-align: center;
-    }
-
-    .section {
-      margin-top: 30px;
-    }
+    body { font-family: Arial; margin: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+    th { background: #f2f2f2; }
+    input { width: 100%; border: none; text-align: center; }
+    button { margin-top: 15px; padding: 10px; }
   </style>
 </head>
 
 <body>
 
-  <h1>Babel Tutor Portal</h1>
+<h1>Babel Tutor Portal</h1>
 
-  <h2>Weekly Schedule</h2>
+<h2>Weekly Schedule</h2>
 
-  <table>
-    <tr>
-      <th>Time</th>
-      <th>Monday</th>
-      <th>Tuesday</th>
-      <th>Wednesday</th>
-      <th>Thursday</th>
-      <th>Friday</th>
-    </tr>
+<table>
+  <tr>
+    <th>Time</th>
+    <th>Monday</th>
+    <th>Tuesday</th>
+    <th>Wednesday</th>
+    <th>Thursday</th>
+    <th>Friday</th>
+  </tr>
 
-    <tr>
-      <td>9–10</td>
-      <td><input class="cell"></td>
-      <td><input class="cell"></td>
-      <td><input class="cell"></td>
-      <td><input class="cell"></td>
-      <td><input class="cell"></td>
-    </tr>
+  <tr>
+    <td>9–10</td>
+    <td><input id="mon1"></td>
+    <td><input id="tue1"></td>
+    <td><input id="wed1"></td>
+    <td><input id="thu1"></td>
+    <td><input id="fri1"></td>
+  </tr>
 
-    <tr>
-      <td>10–11</td>
-      <td><input class="cell"></td>
-      <td><input class="cell"></td>
-      <td><input class="cell"></td>
-      <td><input class="cell"></td>
-      <td><input class="cell"></td>
-    </tr>
-  </table>
+  <tr>
+    <td>10–11</td>
+    <td><input id="mon2"></td>
+    <td><input id="tue2"></td>
+    <td><input id="wed2"></td>
+    <td><input id="thu2"></td>
+    <td><input id="fri2"></td>
+  </tr>
+</table>
 
-  <div class="section">
-    <h2>Upload Documents</h2>
-    <p>We will add invoice upload next.</p>
-  </div>
+<button onclick="saveData()">Save Schedule</button>
+
+<script>
+const endpoint = "https://script.google.com/macros/s/AKfycbwHB7y5u9JHUrxEJIZJw6GJEOfyEe6oh5oTva7cO5D5_SI58Tu1Jc9tIZj-IGJ30sfT/exec";
+
+function saveData() {
+  const data = [
+    {day:"Monday", time:"9-10", entry:document.getElementById("mon1").value},
+    {day:"Tuesday", time:"9-10", entry:document.getElementById("tue1").value},
+    {day:"Wednesday", time:"9-10", entry:document.getElementById("wed1").value},
+    {day:"Thursday", time:"9-10", entry:document.getElementById("thu1").value},
+    {day:"Friday", time:"9-10", entry:document.getElementById("fri1").value},
+
+    {day:"Monday", time:"10-11", entry:document.getElementById("mon2").value},
+    {day:"Tuesday", time:"10-11", entry:document.getElementById("tue2").value},
+    {day:"Wednesday", time:"10-11", entry:document.getElementById("wed2").value},
+    {day:"Thursday", time:"10-11", entry:document.getElementById("thu2").value},
+    {day:"Friday", time:"10-11", entry:document.getElementById("fri2").value}
+  ];
+
+  data.forEach(item => {
+    fetch(endpoint, {
+      method: "POST",
+      body: JSON.stringify({
+        tutor: "TEST TUTOR",
+        day: item.day,
+        time: item.time,
+        entry: item.entry
+      })
+    });
+  });
+
+  alert("Schedule saved!");
+}
+</script>
 
 </body>
 </html>
