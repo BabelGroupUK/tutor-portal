@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>John - Tutor Schedule</title>
+  <style>
+    body { font-family: Arial; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; text-align: center; }
+    th { background: #f2f2f2; }
+    input { width: 100%; border: none; text-align: center; }
+    button { margin-top: 15px; padding: 10px; }
+  </style>
+</head>
+
+<body>
+
+<h1>John - Weekly Schedule</h1>
+
+<table id="grid">
+  <tr>
+    <th>Time</th>
+    <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+  </tr>
+</table>
+
+<button onclick="save()">Save Schedule</button>
+
+<script>
+const endpoint = "https://script.google.com/macros/s/AKfycbwtefuKzTsr6y9njepIfrORWun1iWL6E4_HLkjHG7M5m1qG7TLLZ0AE4lt97jLHmDwC/exec";
+const tutor = "John";
+
+const times = [
+"06:00-06:30","06:30-07:00","07:00-07:30","07:30-08:00",
+"08:00-08:30","08:30-09:00","09:00-09:30","09:30-10:00",
+"10:00-10:30","10:30-11:00","11:00-11:30","11:30-12:00",
+"12:00-12:30","12:30-13:00","13:00-13:30","13:30-14:00",
+"14:00-14:30","14:30-15:00","15:00-15:30","15:30-16:00",
+"16:00-16:30","16:30-17:00","17:00-17:30","17:30-18:00",
+"18:00-18:30","18:30-19:00","19:00-19:30","19:30-20:00"
+];
+
+const days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+
+const grid = document.getElementById("grid");
+
+// build table
+times.forEach((time, rowIndex) => {
+  let row = "<tr><td>" + time + "</td>";
+
+  days.forEach((day, colIndex) => {
+    row += `<td><input id="cell-${rowIndex}-${colIndex}"></td>`;
+  });
+
+  row += "</tr>";
+  grid.innerHTML += row;
+});
+
+function save() {
+  times.forEach((time, rowIndex) => {
+    days.forEach((day, colIndex) => {
+
+      const value = document.getElementById(`cell-${rowIndex}-${colIndex}`).value;
+
+      fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify({
+          tutor: tutor,
+          day: day,
+          time: time,
+          value: value
+        })
+      });
+
+    });
+  });
+
+  alert("Saved!");
+}
+</script>
+
+</body>
+</html>
